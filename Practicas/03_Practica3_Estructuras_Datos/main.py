@@ -93,10 +93,10 @@ def main():
                     #Lista circular
                     pass
                 case 3:
-                    pila = Pila.Pila()
+                    pila = Pila()
                     menu_pila(pila)#llamamos la funcion menu para ejecutar el programa                    
                 case 4:
-                    cola = Cola.Cola()
+                    cola = Cola()
                     menu_cola(cola)
                 case 5:
                     #Lista doblemente ligada
