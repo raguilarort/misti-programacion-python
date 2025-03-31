@@ -3,8 +3,8 @@ import os
 import time
 
 from Estructuras.Lista_Simple.Pra3 import ListaSimple
-from Estructuras.Cola import Cola
-from Estructuras.Pila import Pila
+from Estructuras.Cola.Cola import Cola
+from Estructuras.Pila.Pila import Pila
 
 def limpiar_pantalla():
     if platform.system() == 'Windows':
