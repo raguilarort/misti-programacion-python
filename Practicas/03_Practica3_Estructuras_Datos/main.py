@@ -113,15 +113,22 @@ def menu_cola(cola):
             except ValueError:
                 print("Por favor, ingresa solo números enteros.")
         elif opcion == "2":
-            print("Elemento desencolado:", cola.desencolar())
+            elemento = cola.desencolar()
+
+            if elemento:
+                print("Elemento desencolado:", elemento.valor)
+            else:
+                print("La cola está vacía, no hay elementos para extraer.")
         elif opcion == "3":
-            print("Tamaño de la cola:", cola.tamano())
+            print("Tamaño de la cola:", cola.tamanio())
         elif opcion == "4":
-            cola.mostrar()
+            cola.mostrar_elementos()
         elif opcion == "0":
             break
         else:
             print("Opción no válida")
+        
+        time.sleep(3)
 
 # Función main
 def main():
