@@ -54,23 +54,27 @@ def menu_cola(cola):
         print("1. Encolar")
         print("2. Desencolar")
         print("3. Tamaño")
-        print("4. Regresar al menú principal")
+        print("4. Mostrar contenido")
+        print("0. Regresar al menú principal")
 
         opcion = input("Ingresa tu opción: ")
 
         if opcion == "1":
-            item = input("Ingresa el elemento a encolar: ")
-            cola.encolar(item)
+            try:
+                numero = int(input("Ingresa un número entero: "))
+                cola.encolar(numero) #Se llama la funcion encolar para agregar el numero recibido
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")
         elif opcion == "2":
             print("Elemento desencolado:", cola.desencolar())
         elif opcion == "3":
             print("Tamaño de la cola:", cola.tamano())
         elif opcion == "4":
+            cola.mostrar()
+        elif opcion == "0":
             break
         else:
             print("Opción no válida")
-
-
 
 # Función main
 def main():
@@ -94,7 +98,6 @@ def main():
                 case 4:
                     cola = Cola.Cola()
                     menu_cola(cola)
-                    pass
                 case 5:
                     #Lista doblemente ligada
                     pass
