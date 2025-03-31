@@ -9,7 +9,7 @@ def limpiar_pantalla():
         os.system('clear')
 
 
-def menu_principal(self, cliente):
+def menu_principal():
         print('******** PRÁTICA 3. ESTRUCTURAS DE DATOS ********\n')
         print('Indica con qué estructura de datos quieres trabajar\n')
         print('1. Lista simple\n')
@@ -25,6 +25,7 @@ def menu_principal(self, cliente):
 def main():
     while True:
         limpiar_pantalla()
+        menu_principal()
 
         try:
             opcion_principal = int(input('Opción: '))
@@ -37,8 +38,7 @@ def main():
                     #Lista circular
                     pass
                 case 3:
-                    #Pila
-                    pass
+                    os.system("start cmd /k python Pila.py")
                 case 4:
                     #Cola
                     pass
@@ -47,6 +47,9 @@ def main():
                     pass
                 case 6:
                     #Lista doblemente ligada Circular
+                    pass
+                case 7:
+                    #Árbol Binario
                     pass
                 case 0:
                     print('Cerrando programa...')
