@@ -65,25 +65,31 @@ def menu_lista_simple(lista):
             print("Opción no válida")
 
 #from pila import Pila  # Importamos la clase Pila desde pila.py aqui agregar la parte de eliminación
-def menu_pila(pila):#función para mostrar el menú y gestionar la inserción
-    #pila = Pila()#instancia. objeto pila de la clase Pila para almacenar los números ingresados
-    while True:#
-        print("\n1. Push")
+def menu_pila(pila):  # Función para mostrar el menú y gestionar las operaciones de la pila
+    while True:
+        print("\n1. Push (Insertar)")
         print("2. Mostrar pila")
-        print("3. Salir")
+        print("3. Pop (Eliminar)")
+        print("0. Salir")
         opcion = input("Elige una opción: ")
-        
-        if opcion == "1":
-            try:#try-except para manejar cualquier error por un valor inválido
+
+        if opcion == "1":  # Insertar elemento en la pila
+            try:
                 numero = int(input("Ingresa un número entero: "))
-                pila.insertar(numero)#se llama a pila.insertar para guardar el numero ingresado
+                pila.insertar(numero)  # Se llama a pila.insertar para guardar el número ingresado
                 print("Número insertado correctamente.")
             except ValueError:
                 print("Por favor, ingresa solo números enteros.")
-        elif opcion == "2":
+        elif opcion == "2":  # Mostrar la pila actual
             pila.mostrar()
-        elif opcion == "3":
-            print("Saliendo del programa")
+        elif opcion == "3":  # Eliminar elemento de la pila
+            elemento_eliminado = pila.pop()  # Llamar al método pop de la pila
+            if elemento_eliminado is not None:
+                print(f"Elemento eliminado: {elemento_eliminado}")
+            else:
+                print("La pila está vacía, no se puede eliminar ningún elemento.")
+        elif opcion == "0":  # Salir del menú de la pila
+            print("Saliendo del programa...")
             break
         else:
             print("Opción no válida, intenta de nuevo.")
