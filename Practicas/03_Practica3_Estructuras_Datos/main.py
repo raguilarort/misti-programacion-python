@@ -49,13 +49,16 @@ def menu_lista_simple(lista):
             lista.mostrar()
         elif opcion == "4":
             try:#try-except para manejar cualquier error por un valor inválido
-                numero = int(input("Introduzca el número a borrar "))
-                lista.borrar(numero)
-                print("Número insertado correctamente.")
+                numero = int(input("Introduzca el número a borrar: "))
+                if lista.buscar(numero):
+                    lista.borrar(numero)
+                else:
+                    print("El número ingresado ",{numero},", no existe en la lista.")
             except ValueError:
                 print("Por favor, ingresa solo números enteros.")
         elif opcion == "5":
-            lista.borrar_lista()            
+            lista.borrar_lista()
+            print("La lista se eliminó.")         
         elif opcion == "0":
             break
         else:

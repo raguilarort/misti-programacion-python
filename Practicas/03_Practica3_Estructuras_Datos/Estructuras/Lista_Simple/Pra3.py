@@ -83,6 +83,19 @@ class ListaSimple:
         ins = int(input('Número a insertar: '))
         self.insertar(ins)
     
+    '''
+    Método para verificar la existencia de un elemento
+    '''
+    def buscar(self, v):
+        if not self.esta_vacia():
+            nodo_actual = self.cabeza
+            
+            while nodo_actual:
+                if nodo_actual.valor == v:
+                    return True
+                
+                nodo_actual = nodo_actual.siguiente
+
 # Programa principal equivalente al main() en C
 '''
 if __name__ == "__main__":
