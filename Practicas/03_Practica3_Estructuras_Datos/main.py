@@ -3,6 +3,7 @@ import os
 import time
 
 from Estructuras.Cola import Cola
+from Estructuras.Pila import Pila
 
 def limpiar_pantalla():
     if platform.system() == 'Windows':
@@ -21,6 +22,30 @@ def menu_principal():
         print('6. Lista doblemente ligada circular\n')
         print('7. Árbol binario\n')
         print('0. Salir\n')
+
+#from pila import Pila  # Importamos la clase Pila desde pila.py aqui agregar la parte de eliminación
+def menu_pila(pila):#función para mostrar el menú y gestionar la inserción
+    #pila = Pila()#instancia. objeto pila de la clase Pila para almacenar los números ingresados
+    while True:#
+        print("\n1. Push")
+        print("2. Mostrar pila")
+        print("3. Salir")
+        opcion = input("Elige una opción: ")
+        
+        if opcion == "1":
+            try:#try-except para manejar cualquier error por un valor inválido
+                numero = int(input("Ingresa un número entero: "))
+                pila.insertar(numero)#se llama a pila.insertar para guardar el numero ingresado
+                print("Número insertado correctamente.")
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")
+        elif opcion == "2":
+            pila.mostrar()
+        elif opcion == "3":
+            print("Saliendo del programa")
+            break
+        else:
+            print("Opción no válida, intenta de nuevo.")
 
 def menu_cola(cola):
     while True:
@@ -45,6 +70,8 @@ def menu_cola(cola):
         else:
             print("Opción no válida")
 
+
+
 # Función main
 def main():
     while True:
@@ -62,7 +89,8 @@ def main():
                     #Lista circular
                     pass
                 case 3:
-                    pass                    
+                    pila = Pila.Pila()
+                    menu_pila(pila)#llamamos la funcion menu para ejecutar el programa                    
                 case 4:
                     cola = Cola.Cola()
                     menu_cola(cola)
