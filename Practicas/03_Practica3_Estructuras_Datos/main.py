@@ -2,6 +2,7 @@ import platform
 import os
 import time
 
+from Estructuras.Lista_Simple.Pra3 import ListaSimple
 from Estructuras.Cola import Cola
 from Estructuras.Pila import Pila
 
@@ -22,6 +23,43 @@ def menu_principal():
         print('6. Lista doblemente ligada circular\n')
         print('7. Árbol binario\n')
         print('0. Salir\n')
+
+def menu_lista_simple(lista):
+    while True:
+        print("\nOperaciones de Lista Simple:")
+        print("1. Insertar")
+        print("2. Modificar")
+        print("3. Mostrar")
+        print("4. Borrar")
+        print("5. Borrar lista")
+        print("0. Regresar al menú principal")
+
+        opcion = input("Ingresa tu opción: ")
+
+        if opcion == "1":
+            try:#try-except para manejar cualquier error por un valor inválido
+                numero = int(input("Ingresa un número entero a insertar en la lista simple: "))
+                print(lista.insertar(numero))
+                print("Número insertado correctamente.")
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")
+        elif opcion == "2":
+            lista.modificar()
+        elif opcion == "3":
+            lista.mostrar()
+        elif opcion == "4":
+            try:#try-except para manejar cualquier error por un valor inválido
+                numero = int(input("Introduzca el número a borrar "))
+                lista.borrar(numero)
+                print("Número insertado correctamente.")
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")
+        elif opcion == "5":
+            lista.borrar_lista()            
+        elif opcion == "0":
+            break
+        else:
+            print("Opción no válida")
 
 #from pila import Pila  # Importamos la clase Pila desde pila.py aqui agregar la parte de eliminación
 def menu_pila(pila):#función para mostrar el menú y gestionar la inserción
@@ -88,7 +126,10 @@ def main():
             match opcion_principal:
                 case 1:
                     #Lista simple
-                    pass
+                    lista = ListaSimple()
+                    print("Esta es la lista")
+                    print(lista)
+                    menu_lista_simple(lista)
                 case 2:
                     #Lista circular
                     pass

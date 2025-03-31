@@ -84,6 +84,7 @@ class ListaSimple:
         self.insertar(ins)
     
 # Programa principal equivalente al main() en C
+'''
 if __name__ == "__main__":
     lista = ListaSimple()
     number = int (input('Numero: '))
@@ -117,3 +118,4 @@ if __name__ == "__main__":
     lista.mostrar()
     lista.modificar()    
     lista.mostrar()
+'''
