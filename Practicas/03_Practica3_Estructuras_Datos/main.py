@@ -2,12 +2,13 @@ import platform
 import os
 import time
 
+from Estructuras.Cola import Cola
+
 def limpiar_pantalla():
     if platform.system() == 'Windows':
         os.system('cls')
     else:
         os.system('clear')
-
 
 def menu_principal():
         print('******** PRÁTICA 3. ESTRUCTURAS DE DATOS ********\n')
@@ -20,6 +21,29 @@ def menu_principal():
         print('6. Lista doblemente ligada circular\n')
         print('7. Árbol binario\n')
         print('0. Salir\n')
+
+def menu_cola(cola):
+    while True:
+        limpiar_pantalla()
+        print("\nOperaciones de Cola:")
+        print("1. Encolar")
+        print("2. Desencolar")
+        print("3. Tamaño")
+        print("4. Regresar al menú principal")
+
+        opcion = input("Ingresa tu opción: ")
+
+        if opcion == "1":
+            item = input("Ingresa el elemento a encolar: ")
+            cola.encolar(item)
+        elif opcion == "2":
+            print("Elemento desencolado:", cola.desencolar())
+        elif opcion == "3":
+            print("Tamaño de la cola:", cola.tamano())
+        elif opcion == "4":
+            break
+        else:
+            print("Opción no válida")
 
 # Función main
 def main():
@@ -38,9 +62,10 @@ def main():
                     #Lista circular
                     pass
                 case 3:
-                    os.system("start cmd /k python Pila.py")
+                    pass                    
                 case 4:
-                    #Cola
+                    cola = Cola.Cola()
+                    menu_cola(cola)
                     pass
                 case 5:
                     #Lista doblemente ligada
