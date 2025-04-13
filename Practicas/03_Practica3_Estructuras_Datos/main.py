@@ -5,6 +5,7 @@ import time
 from Estructuras.Lista_Simple.Pra3 import ListaSimple
 from Estructuras.Cola.Cola import Cola
 from Estructuras.Pila.Pila import Pila
+from Estructuras.ListaDL import ListaDoblementeLigada
 
 def limpiar_pantalla():
     if platform.system() == 'Windows':
