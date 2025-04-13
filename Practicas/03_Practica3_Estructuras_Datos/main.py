@@ -129,6 +129,42 @@ def menu_cola(cola):
             print("Opción no válida")
         
         time.sleep(3)
+        
+def menu_lista_doblemente_ligada(lista):
+    while True:
+        print("\n1. Insertar al inicio")
+        print("2. Insertar al final")
+        print("3. Eliminar del inicio")
+        print("4. Eliminar del final")
+        print("5. Mostrar desde el inicio")
+        print("6. Mostrar desde el final")
+        print("0. Salir")
+        opcion = input("Elige una opción: ")
+
+        if opcion == "1":
+            valor = input("Ingresa un valor: ")
+            lista.insertar_inicio(valor)
+        elif opcion == "2":
+            valor = input("Ingresa un valor: ")
+            lista.insertar_final(valor)
+        elif opcion == "3":
+            eliminado = lista.eliminar_inicio()
+            if eliminado is not None:
+                print(f"Elemento eliminado: {eliminado}")
+        elif opcion == "4":
+            eliminado = lista.eliminar_final()
+            if eliminado is not None:
+                print(f"Elemento eliminado: {eliminado}")
+        elif opcion == "5":
+            lista.mostrar_adelante()
+        elif opcion == "6":
+            lista.mostrar_atras()
+        elif opcion == "0":
+            print("Saliendo del programa...")
+            break
+        else:
+            print("Opción no válida, intenta de nuevo.")
+
 
 # Función main
 def main():
@@ -157,7 +193,8 @@ def main():
                     menu_cola(cola)
                 case 5:
                     #Lista doblemente ligada
-                    pass
+                    lista = ListaDoblementeLigada()
+                    menu_lista_doblemente_ligada(lista)
                 case 6:
                     #Lista doblemente ligada Circular
                     pass
