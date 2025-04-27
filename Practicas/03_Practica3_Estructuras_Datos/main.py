@@ -2,10 +2,10 @@ import platform
 import os
 import time
 
-from Estructuras.Lista_Simple.Pra3 import ListaSimple
-from Estructuras.Cola.Cola import Cola
-from Estructuras.Pila.Pila import Pila
-from Estructuras.ListaDL import ListaDoblementeLigada
+from Modelo.Estructuras.Lista_Simple.Pra3 import ListaSimple
+from Modelo.Estructuras.Cola.Cola import Cola
+from Modelo.Estructuras.Pila.Pila import Pila
+from Modelo.Estructuras.ListaDL import ListaDL
 
 def limpiar_pantalla():
     if platform.system() == 'Windows':
@@ -117,7 +117,7 @@ def menu_cola(cola):
             elemento = cola.desencolar()
 
             if elemento:
-                print("Elemento desencolado:", elemento.valor)
+                print("Elemento desencolado:", elemento.value)
             else:
                 print("La cola está vacía, no hay elementos para extraer.")
         elif opcion == "3":
@@ -194,7 +194,7 @@ def main():
                     menu_cola(cola)
                 case 5:
                     #Lista doblemente ligada
-                    lista = ListaDoblementeLigada()
+                    lista = ListaDL()
                     menu_lista_doblemente_ligada(lista)
                 case 6:
                     #Lista doblemente ligada Circular

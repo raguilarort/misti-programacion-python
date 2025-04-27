@@ -1,4 +1,4 @@
-from Estructuras.Cola.Nodo import Nodo
+from Modelo.Nodos.Nodo import Nodo
 
 class Cola:
     def __init__(self):
@@ -13,7 +13,7 @@ class Cola:
             self.ultimo = nuevo_nodo
             self.primero = nuevo_nodo
         else:
-            self.ultimo.siguiente = nuevo_nodo #El último nodo de la cola apuntará al nuevo y el nuevo apuntará a NULL
+            self.ultimo.right = nuevo_nodo #El último nodo de la cola apuntará al nuevo y el nuevo apuntará a NULL
             self.ultimo = nuevo_nodo #El apuntador del último elemento apuntará al nuevo nodo que se agregó
 
     def desencolar(self):
@@ -21,7 +21,7 @@ class Cola:
             return None
         else:
             nodo = self.primero
-            self.primero = nodo.siguiente
+            self.primero = nodo.right
 
             if self.primero == None : self.ultimo = None
 
@@ -42,7 +42,7 @@ class Cola:
 
         while nodo_actual:
             tamanio += 1
-            nodo_actual = nodo_actual.siguiente
+            nodo_actual = nodo_actual.right
         
         return tamanio
         
@@ -53,13 +53,13 @@ class Cola:
             nodo_actual = self.primero
 
             while nodo_actual:
-                print(f"{nodo_actual.valor} -> ", end="")
-                nodo_actual = nodo_actual.siguiente
+                print(f"{nodo_actual.value} -> ", end="")
+                nodo_actual = nodo_actual.right
 
             print("NULL")
 
     def mostrar_primer_elemento(self):
-        print(f"{self.primero.valor}")
+        print(f"{self.primero.value}")
 
     def mostrar_ultimo_elemento(self):
-        print(f"{self.ultimo.valor}")
+        print(f"{self.ultimo.value}")
