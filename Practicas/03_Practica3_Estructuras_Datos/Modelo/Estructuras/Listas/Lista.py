@@ -1,4 +1,3 @@
-from Modelo.Nodos.Nodo import Nodo
 
 class Lista:
     def __init__(self):

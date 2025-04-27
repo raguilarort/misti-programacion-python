@@ -2,7 +2,7 @@ import platform
 import os
 import time
 
-from Modelo.Estructuras.Lista_Simple.Pra3 import ListaSimple
+from Modelo.Estructuras.Listas.ListaSimple import ListaSimple
 from Modelo.Estructuras.Cola.Cola import Cola
 from Modelo.Estructuras.Pila.Pila import Pila
 from Modelo.Estructuras.ListaDL import ListaDL
@@ -41,7 +41,6 @@ def menu_lista_simple(lista):
             try:#try-except para manejar cualquier error por un valor inválido
                 numero = int(input("Ingresa un número entero a insertar en la lista simple: "))
                 print(lista.insertar(numero))
-                print("Número insertado correctamente.")
             except ValueError:
                 print("Por favor, ingresa solo números enteros.")
         elif opcion == "2":

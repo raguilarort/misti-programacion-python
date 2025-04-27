@@ -1,16 +1,17 @@
-import Lista
+from Modelo.Estructuras.Listas.Lista import Lista
 from Modelo.Nodos.Nodo import Nodo
+
 
 class ListaSimple(Lista):
     def __init__(self):
         super().__init__()
-    
+
     def insertar(self, v):
         if not self.elemento_existente(v):
             nuevo = Nodo(v)        
         
             # Si la lista está vacía o el nuevo valor es menor que el primero
-            if self.cabeza.value > v:
+            if self.esta_vacia() or self.cabeza.value > v:
                 nuevo.right = self.cabeza
                 self.cabeza = nuevo
             else:
@@ -21,6 +22,9 @@ class ListaSimple(Lista):
                 # Insertar el nuevo nodo
                 nuevo.right = anterior.right
                 anterior.right = nuevo
+            print("Elemento insertado correctamente")
+        else:
+            print("El elemento no se pudo insertar porque ya existía")
     
     def borrar(self, v):
         actual = self.cabeza
