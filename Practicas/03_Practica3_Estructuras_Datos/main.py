@@ -1,11 +1,13 @@
 import platform
 import os
+import random
 import time
 
 from Modelo.Estructuras.Listas.ListaSimple import ListaSimple
 from Modelo.Estructuras.Cola.Cola import Cola
 from Modelo.Estructuras.Pila.Pila import Pila
 from Modelo.Estructuras.ListaDL import ListaDL
+from Modelo.Estructuras.Arbol_Binario.ArbolBinario import ArbolBinario
 
 def limpiar_pantalla():
     if platform.system() == 'Windows':
@@ -165,6 +167,55 @@ def menu_lista_doblemente_ligada(lista):
         else:
             print("Opción no válida, intenta de nuevo.")
 
+def menu_arbol_binario(arbol_binario):
+    while True:
+        limpiar_pantalla()
+        print("\nOperaciones del Árbol Binario:")
+        print("1. Buscar elemento")
+        print("2. Insertar un elemento")
+        print("3. Borrar un elemento")
+        print("4. Información")
+        print("0. Regresar al menú principal")
+
+        opcion = input("Ingresa tu opción: ")
+
+        if opcion == "1":
+            try:
+                numero = int(input("Ingresa el número que quieres buscar: "))
+                if arbol_binario.buscar(numero):
+                    print("El elemento si existe")
+                else:
+                    print("El elemento no existe en el árbol")
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")
+        elif opcion == "2":
+            try:
+                numero = int(input("Ingresa el número que quieres insertar: "))
+                if arbol_binario.buscar(numero):
+                    print("El elemento no se puede insertar porque ya existe en el árbol")
+                else:
+                    arbol_binario.insertar(numero)
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")            
+
+        elif opcion == "3":
+            try:
+                numero = int(input("Ingresa el número que quieres eliminar: "))
+                if arbol_binario.buscar(numero):
+                    arbol_binario.eliminar(numero)
+                    print("El número se eliminó con éxito.")
+                else:
+                    print("El elemento no se puede eliminar porque ya no existe en el árbol")
+            except ValueError:
+                print("Por favor, ingresa solo números enteros.")    
+        elif opcion == "4":
+            arbol_binario.mostrar_contenido()
+        elif opcion == "0":
+            break
+        else:
+            print("Opción no válida")
+        
+        time.sleep(3)
 
 # Función main
 def main():
@@ -200,6 +251,12 @@ def main():
                     pass
                 case 7:
                     #Árbol Binario
+                    arbol_binario = ArbolBinario()
+
+                    for x in range(40):
+                        arbol_binario.insertar(random.randint(0, 1000))
+
+                    menu_arbol_binario(arbol_binario)
                     pass
                 case 0:
                     print('Cerrando programa...')

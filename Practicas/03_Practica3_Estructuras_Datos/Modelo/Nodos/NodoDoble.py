@@ -1,5 +1,5 @@
+from Modelo.Nodos.Nodo import Nodo
 
-import Nodo
 '''
 Clase que representa un nodo doble
 '''
