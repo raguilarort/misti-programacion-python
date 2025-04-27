@@ -18,7 +18,7 @@ class Lista:
                 
                 nodo_actual = nodo_actual.right
 
-    #Método que devuelve el tamaño de la cola
+    #Método que devuelve el tamaño de la lista
     def tamanio(self):
         tamanio = 0
 
