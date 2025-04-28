@@ -278,7 +278,7 @@ def actualizar_registro():
                 nuevo_valor = input("Nuevo correo electronico: ")
             cursor.execute("UPDATE contraseñas SET email = ? WHERE id = ?", (nuevo_valor, id_))
         elif opcion == "4":
-            nueva_contraseña = ("Nuevo password: ")
+            nueva_contraseña = input("Nuevo password: ")
             clave_playfair = "joseprt"
             nueva_contraseña_cifrada = cifrar_playfair(nueva_contraseña, clave_playfair)
             cursor.execute(
