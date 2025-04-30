@@ -7,6 +7,7 @@ from Modelo.Estructuras.Listas.ListaSimple import ListaSimple
 from Modelo.Estructuras.Cola.Cola import Cola
 from Modelo.Estructuras.Pila.Pila import Pila
 from Modelo.Estructuras.ListaDL import ListaDL
+from Modelo.Estructuras.ListaCircularDoblementeL import ListaCircularDoblementeL
 from Modelo.Estructuras.Arbol_Binario.ArbolBinario import ArbolBinario
 
 def limpiar_pantalla():
@@ -166,6 +167,65 @@ def menu_lista_doblemente_ligada(lista):
             break
         else:
             print("Opción no válida, intenta de nuevo.")
+            
+def menu_lista_doble(lista):
+    limpiar_pantalla()
+    
+    while True:
+        print("\n--- OPERACIONES ---")
+        print("1. Insertar elemento")
+        print("2. Borrar elemento")
+        print("3. Mostrar lista (ascendente)")
+        print("4. Modificar elemento")
+        print("5. Buscar elemento")
+        print("6. Mostrar valor actual")
+        print("7. Mover al siguiente")
+        print("8. Mover al anterior")
+        print("9. Mostrar lista en modo descendente")
+        print("0. Volver al menú principal")
+        
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            valor = int(input("Ingrese el valor a insertar: "))
+            lista.insertar(valor)
+        elif opcion == "2":
+            valor = int(input("Ingrese el valor a borrar: "))
+            lista.borrar(valor)
+        elif opcion == "3":
+            lista.mostrar()
+        elif opcion == "4":
+            viejo = int(input("Ingrese el valor a modificar: "))
+            nuevo = int(input("Ingrese el nuevo valor: "))
+            if lista.modificar(viejo, nuevo):
+                print("Elemento modificado")
+            else:
+                print("Elemento no encontrado")
+        elif opcion == "5":
+            valor = int(input("Ingrese el valor a buscar: "))
+            if lista.buscar(valor):
+                print("Elemento encontrado")
+            else:
+                print("Elemento no encontrado")
+        elif opcion == "6":
+            valor = lista.valor_actual()
+            print(f"Valor actual: {valor}" if valor else "Lista vacía")
+        elif opcion == "7":
+            if lista.siguiente():
+                print("Movido al siguiente")
+            else:
+                print("No hay siguiente")
+        elif opcion == "8":
+            if lista.anterior():
+                print("Movido al anterior")
+            else:
+                print("No hay anterior")
+        elif opcion == "9":
+            lista._mostrar_descendente()
+        elif opcion == "0":
+            break
+        else:
+            print("Opción no válida")
 
 def menu_arbol_binario(arbol_binario):
     while True:
@@ -248,7 +308,8 @@ def main():
                     menu_lista_doblemente_ligada(lista)
                 case 6:
                     #Lista doblemente ligada Circular
-                    pass
+                    lista = ListaDoble()
+                    menu_lista_doble(lista)
                 case 7:
                     #Árbol Binario
                     arbol_binario = ArbolBinario()
