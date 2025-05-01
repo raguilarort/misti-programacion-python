@@ -7,7 +7,7 @@ from Modelo.Estructuras.Listas.ListaSimple import ListaSimple
 from Modelo.Estructuras.Cola.Cola import Cola
 from Modelo.Estructuras.Pila.Pila import Pila
 from Modelo.Estructuras.ListaDL import ListaDL
-from Modelo.Estructuras.ListaCircularDoblementeL import ListaCircularDoblementeL
+from Modelo.Estructuras.Listas.ListaCircularDoblementeL import ListaCircularDoblementeL
 from Modelo.Estructuras.Arbol_Binario.ArbolBinario import ArbolBinario
 
 def limpiar_pantalla():
@@ -308,7 +308,7 @@ def main():
                     menu_lista_doblemente_ligada(lista)
                 case 6:
                     #Lista doblemente ligada Circular
-                    lista = ListaDoble()
+                    lista = ListaCircularDoblementeL()
                     menu_lista_doble(lista)
                 case 7:
                     #Árbol Binario
