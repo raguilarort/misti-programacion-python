@@ -2,6 +2,7 @@
 /.venv/
 /.idea/
 .venv/
+venv/
 .idea/
 Practicas/02_Practica2_Simulador_Cajero/misti-cajero-automatico/.git
 Practicas/02_Practica2_Simulador_Cajero/misti-cajero-automatico/.idea/
