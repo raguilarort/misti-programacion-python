@@ -1,7 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - MISTIBank</title>
@@ -13,14 +13,24 @@
     <header>
         <nav>
             <div class="logo">Banco Seguro</div>
-            <a href="login.html" class="login-button">Cerrar Sesión</a>
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Mi Cuenta</a></li>
+                <li><a href="#">Ayuda</a></li>
+            </ul>
+            <a href="{% url 'logout' %}" class="login-button">Cerrar Sesión</a>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
         </nav>
     </header>
 
     <main>
         <section class="dashboard">
             <div class="dashboard-header">
-                <h2>Bienvenido de Nuevo, Ricardo</h2>
+                <h2>Bienvenido de Nuevo, {{ usuario.username }}</h2>
                 <p>Aquí tienes un resumen de tu actividad financiera.</p>
             </div>
             
@@ -29,7 +39,7 @@
                     <div class="card-icon"><i class="fas fa-wallet"></i></div>
                     <div class="card-content">
                         <h3>Saldo Actual</h3>
-                        <p class="balance">$ 75,320.50 MXN</p>
+                        <p class="balance">$ {{ usuario.saldo }} MXN</p>
                     </div>
                 </div>
 
@@ -37,8 +47,8 @@
                     <div class="card-icon"><i class="fas fa-exchange-alt"></i></div>
                     <div class="card-content">
                         <h3>Última Transacción</h3>
-                        <p>Transferencia SPEI</p>
-                        <p class="transaction-amount">-$ 1,250.00 MXN</p>
+                        <p>Próximamente disponible</p>
+                        <p class="transaction-amount">--</p>
                     </div>
                 </div>
 
@@ -62,5 +72,7 @@
             &copy; 2025 Banco Seguro. Todos los derechos reservados.
         </div>
     </footer>
+
+    <script src="{% static 'js/menu.js' %}"></script>
 </body>
 </html>

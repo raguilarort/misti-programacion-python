@@ -1,7 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MISTIBank - Tu Futuro Financiero</title>
@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Se ha movido el estilo del hero aquí para usar una imagen de fondo más específica */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/186461/pexels-photo-186461.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+            url('https://images.pexels.com/photos/186461/pexels-photo-186461.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
         }
     </style>
 </head>
@@ -47,22 +47,22 @@
             <h2>Nuestros Productos Destacados</h2>
             <div class="feature-grid">
                 <div class="feature-item">
-                    <i class="icon-card"></i>
+                    <i class="fas fa-university"></i>
                     <h3>Cuentas Bancarias</h3>
                     <p>Abre tu cuenta de ahorro o corriente con las mejores condiciones del mercado.</p>
                 </div>
                 <div class="feature-item">
-                    <i class="icon-loan"></i>
+                    <i class="fas fa-hand-holding-usd"></i>
                     <h3>Créditos</h3>
                     <p>Solicita un préstamo personal, hipotecario o automotriz con bajas tasas de interés.</p>
                 </div>
                 <div class="feature-item">
-                    <i class="icon-invest"></i>
+                    <i class="fas fa-chart-line"></i>
                     <h3>Inversiones</h3>
                     <p>Haz crecer tu dinero con nuestras diversas opciones de inversión.</p>
                 </div>
                 <div class="feature-item">
-                    <i class="icon-mobile"></i>
+                    <i class="fas fa-mobile-alt"></i>
                     <h3>Banca Móvil</h3>
                     <p>Accede a tus cuentas en cualquier momento y lugar con nuestra app.</p>
                 </div>
@@ -78,25 +78,25 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-section about">
+            <div class="footer-section about" id="nosotros">
                 <h3>Banco Seguro</h3>
                 <p>Somos un banco líder en México, comprometidos con el bienestar financiero de nuestros clientes.</p>
             </div>
             <div class="footer-section links">
                 <h3>Enlaces Rápidos</h3>
                 <ul>
-                    <li><a href="index.html#productos">Productos</a></li>
-                    <li><a href="index.html#servicios">Servicios</a></li>
-                    <li><a href="index.html#nosotros">Nosotros</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
                     <li><a href="#">Política de Privacidad</a></li>
                 </ul>
             </div>
-            <div class="footer-section contact">
+            <div class="footer-section contact" id="contacto">
                 <h3>Contáctanos</h3>
-                <p><i class="icon-phone"></i> +52 55 1234 5678</p>
-                <p><i class="icon-email"></i> info@bancoseguro.com</p>
-                <p><i class="icon-address"></i> Av. Siempre Viva 123, Ciudad de México</p>
+                <p><i class="fas fa-phone"></i> +52 55 1234 5678</p>
+                <p><i class="fas fa-envelope"></i> info@bancoseguro.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Av. Siempre Viva 123, Ciudad de México</p>
             </div>
         </div>
         <div class="footer-bottom">
