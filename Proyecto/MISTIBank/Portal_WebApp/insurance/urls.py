@@ -11,4 +11,6 @@ urlpatterns = [
     path('depositar/', views.depositar, name='depositar'),
     path('retirar/', views.retirar, name='retirar'),
     path('seguros/contratar/<int:tipo_id>/', views.contratar_seguro, name='contratar_seguro'),
+    path('grafica-movimientos/', views.grafica_movimientos, name='grafica_movimientos'),
+
 ]

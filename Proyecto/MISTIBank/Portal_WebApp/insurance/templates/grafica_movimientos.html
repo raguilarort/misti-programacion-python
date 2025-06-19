@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráfica de Movimientos</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <section class="dashboard">
+        <div class="dashboard-header">
+            <h2>Movimientos del Mes</h2>
+            <p>Distribución entre depósitos y retiros</p>
+        </div>
+
+        <div style="max-width: 500px; margin: auto;">
+            <canvas id="graficoMovimientos"></canvas>
+        </div>
+
+        <div style="text-align:center; margin-top: 30px;">
+            <a href="{% url 'dashboard' %}" class="action-btn">Regresar</a>
+        </div>
+    </section>
+
+    <script>
+        const ctx = document.getElementById('graficoMovimientos').getContext('2d');
+
+        const grafico = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ labels|safe }},
+                datasets: [{
+                    data: {{ valores|safe }},
+                    backgroundColor: ['#007bff', '#28a745'],
+                }]
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const porcentaje = {{ porcentajes|safe }}[context.dataIndex];
+                            return porcentaje + '% (' + value + ')';
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+</body>
+</html>

@@ -4,7 +4,9 @@ from .models import Usuario, Movimiento
 from decimal import Decimal
 from .models import Usuario, Movimiento, SeguroContratado
 from .models import Usuario, Movimiento, SeguroContratado, TipoSeguro
-
+from django.utils.timezone import now
+from datetime import timedelta
+from .models import Movimiento
 
 # VISTA INICIAL
 def hello(request):
@@ -123,3 +125,29 @@ def contratar_seguro(request, tipo_id):
         SeguroContratado.objects.create(usuario=usuario, tipo_seguro=tipo)
 
     return redirect("seguros_contratados")
+
+
+def grafica_movimientos(request):
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
+        return redirect("login")
+
+    fecha_inicio = now() - timedelta(days=30)
+    movimientos = Movimiento.objects.filter(usuario_id=usuario_id, fecha__gte=fecha_inicio)
+
+    conteo = {"DEPOSITO": 0, "RETIRO": 0}
+    for mov in movimientos:
+        tipo = mov.tipo.upper()
+        if tipo in conteo:
+            conteo[tipo] += 1
+
+    total = sum(conteo.values()) or 1
+    porcentajes = {k: round((v / total) * 100, 1) for k, v in conteo.items()}
+
+    context = {
+        "labels": list(conteo.keys()),
+        "valores": list(conteo.values()),
+        "porcentajes": list(porcentajes.values())
+    }
+
+    return render(request, "grafica_movimientos.html", context)
