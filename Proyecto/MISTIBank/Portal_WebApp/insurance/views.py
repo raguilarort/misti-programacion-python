@@ -7,6 +7,11 @@ from .models import Usuario, Movimiento, SeguroContratado, TipoSeguro
 from django.utils.timezone import now
 from datetime import timedelta
 from .models import Movimiento
+from django.db.models import Count
+from .models import TipoSeguro, SeguroContratado
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 # VISTA INICIAL
 def hello(request):
@@ -151,3 +156,42 @@ def grafica_movimientos(request):
     }
 
     return render(request, "grafica_movimientos.html", context)
+
+def grafica_marketing(request):
+    datos = (SeguroContratado.objects
+             .values('tipo_seguro__nombre')
+             .annotate(total=Count('id'))
+             .order_by('-total'))
+
+    labels = [d['tipo_seguro__nombre'] for d in datos]
+    valores = [d['total'] for d in datos]
+    total = sum(valores) or 1  # Evitar división por cero
+
+    # Calcular porcentajes
+    porcentajes = [(v / total) * 100 for v in valores]
+
+    # Colores llamativos
+    colores = ['#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1']  # azul, verde, rojo, amarillo, morado
+
+    # Crear gráfica
+    plt.figure(figsize=(9, 5))
+    bars = plt.bar(labels, porcentajes, color=colores[:len(labels)])
+    plt.title('Seguros más Contratados')
+    plt.ylabel('Porcentaje (%)')
+    plt.ylim(0, 100)
+
+    # Mostrar porcentaje arriba de cada barra
+    for bar, pct in zip(bars, porcentajes):
+        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1, f'{pct:.1f}%', ha='center', fontsize=10)
+
+    plt.tight_layout()
+
+    # Convertir a imagen base64
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    buffer.close()
+    plt.close()
+
+    return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})
