@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Usuario, Movimiento
 from decimal import Decimal
+from .models import Usuario, Movimiento, SeguroContratado
+from .models import Usuario, Movimiento, SeguroContratado, TipoSeguro
+
 
 # VISTA INICIAL
 def hello(request):
@@ -85,3 +88,38 @@ def retirar(request):
 # VISTA DE ABOUT (estática)
 def about(request):
     return HttpResponse("About")
+
+
+# SEGUROS CONTRATADOS
+def seguros_contratados(request):
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
+        return redirect("login")
+
+    usuario = Usuario.objects.get(id=usuario_id)
+    contratos = SeguroContratado.objects.filter(usuario=usuario)
+    tipos_contratados = contratos.values_list('tipo_seguro__id', flat=True)
+    seguros_disponibles = TipoSeguro.objects.all()
+    total_mensual = sum([s.tipo_seguro.precio for s in contratos])
+
+    return render(request, "seguros_contratados.html", {
+        "contratos": contratos,
+        "seguros_disponibles": seguros_disponibles,
+        "tipos_contratados": tipos_contratados,
+        "total_mensual": total_mensual,
+    })
+
+
+def contratar_seguro(request, tipo_id):
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
+        return redirect("login")
+
+    usuario = Usuario.objects.get(id=usuario_id)
+    tipo = TipoSeguro.objects.get(id=tipo_id)
+
+    # Evitar duplicados
+    if not SeguroContratado.objects.filter(usuario=usuario, tipo_seguro=tipo).exists():
+        SeguroContratado.objects.create(usuario=usuario, tipo_seguro=tipo)
+
+    return redirect("seguros_contratados")

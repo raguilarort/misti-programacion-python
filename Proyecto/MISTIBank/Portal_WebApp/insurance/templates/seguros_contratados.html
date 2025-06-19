@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seguros Contratados</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .seguro-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .seguro-card h3 {
+            margin-bottom: 10px;
+        }
+        .seguro-card p {
+            margin: 5px 0;
+        }
+        .actions {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="login-section">
+        <div class="login-container" style="max-width: 900px;">
+            <h2>Tus Seguros Contratados</h2>
+
+            {% if contratos %}
+                <div>
+                    {% for contrato in contratos %}
+                        <div class="seguro-card">
+                            <h3>{{ contrato.tipo_seguro.nombre }}</h3>
+                            <p><strong>Mensual:</strong> ${{ contrato.tipo_seguro.precio }} MXN</p>
+                            <p>
+                                {% if contrato.tipo_seguro.nombre == "Seguro Básico" %}
+                                    Asegura tu vehículo contra daños a terceros, gastos médicos, asistencia vial y defensa legal.
+                                {% elif contrato.tipo_seguro.nombre == "Seguro Amplio" %}
+                                    Protección contra daños materiales, robo total y responsabilidad civil.
+                                {% elif contrato.tipo_seguro.nombre == "Seguro Amplio Plus" %}
+                                    Incluye deducible eliminado, auto sustituto y devolución de primas.
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <p><strong>Total mensual:</strong> ${{ total_mensual }} MXN</p>
+            {% else %}
+                <p>No tienes seguros contratados.</p>
+            {% endif %}
+
+            <hr>
+
+            <h3>Contratar nuevo seguro</h3>
+            {% for seguro in seguros_disponibles %}
+                {% if seguro.id not in tipos_contratados %}
+                    <div class="seguro-card">
+                        <h3>{{ seguro.nombre }}</h3>
+                        <p><strong>Mensual:</strong> ${{ seguro.precio }} MXN</p>
+                        <p>
+                            {% if seguro.nombre == "Seguro Básico" %}
+                                Protección básica con responsabilidad civil y gastos médicos.
+                            {% elif seguro.nombre == "Seguro Amplio" %}
+                                Daños materiales, robo total y asistencia vial.
+                            {% elif seguro.nombre == "Seguro Amplio Plus" %}
+                                Máxima cobertura: sin deducible, auto sustituto, devolución de primas.
+                            {% endif %}
+                        </p>
+                        <div class="actions">
+                            <a href="{% url 'contratar_seguro' seguro.id %}" class="action-btn">Contratar</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <hr>
+
+            <h3>Todos nuestros seguros incluyen estas coberturas:</h3>
+            <ul style="text-align: left;">
+                <li><strong>Responsabilidad Civil Bienes:</strong> $500,000 a $1,500,000 por daños a propiedad ajena.</li>
+                <li><strong>Responsabilidad Civil Personas:</strong> $500,000 a $1,500,000 por lesiones o muerte.</li>
+                <li><strong>Responsabilidad Civil Fallecimiento:</strong> $2M a $6M para acompañantes.</li>
+                <li><strong>Asistencia legal:</strong> Abogado 24/7 con cobertura de fianzas.</li>
+            </ul>
+
+            <br>
+            <a href="{% url 'dashboard' %}" class="cta-button">Regresar</a>
+        </div>
+    </section>
+</body>
+</html>
