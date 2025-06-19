@@ -12,6 +12,15 @@ from .models import TipoSeguro, SeguroContratado
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+import os
+from datetime import datetime
+from django.http import FileResponse, HttpResponse
+from django.conf import settings
+from django.template.loader import render_to_string
+from weasyprint import HTML
+
+
+
 
 # VISTA INICIAL
 def hello(request):
@@ -195,3 +204,62 @@ def grafica_marketing(request):
     plt.close()
 
     return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})
+
+
+def generar_pdf_estado_cuenta(usuario, mes, anio):
+    carpeta_pdfs = os.path.join(settings.MEDIA_ROOT, 'estados_de_cuenta')
+    os.makedirs(carpeta_pdfs, exist_ok=True)
+
+    filename = f"estado_{usuario.username}_{mes}_{anio}.pdf"
+    ruta_pdf = os.path.join(carpeta_pdfs, filename)
+
+    if os.path.exists(ruta_pdf):
+        return ruta_pdf  # Ya existe
+
+    # Datos del usuario y movimientos
+    movimientos = Movimiento.objects.filter(
+        usuario=usuario,
+        fecha__month=mes,
+        fecha__year=anio
+    ).order_by('-fecha')
+
+    seguros = SeguroContratado.objects.filter(
+        usuario=usuario,
+        fecha_contratacion__month=mes,
+        fecha_contratacion__year=anio
+    )
+
+    # Renderizar HTML con adornos
+    html = render_to_string("estado_cuenta_pdf.html", {
+        "usuario": usuario,
+        "movimientos": movimientos,
+        "seguros": seguros,
+        "mes": mes,
+        "anio": anio
+    })
+
+    # Crear el PDF con WeasyPrint
+    with open(ruta_pdf, "wb") as f:
+        HTML(string=html).write_pdf(f)
+
+    return ruta_pdf
+
+def estado_cuenta_pdf(request):
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
+        return redirect("login")
+
+    try:
+        usuario = Usuario.objects.get(id=usuario_id)
+    except Usuario.DoesNotExist:
+        return redirect("login")
+
+    ahora = datetime.now()
+    mes = ahora.month
+    anio = ahora.year
+
+    ruta_pdf = generar_pdf_estado_cuenta(usuario, mes, anio)
+    if not os.path.exists(ruta_pdf):
+        return HttpResponse("No se pudo generar el PDF", status=500)
+
+    return FileResponse(open(ruta_pdf, "rb"), content_type='application/pdf')

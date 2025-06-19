@@ -13,5 +13,6 @@ urlpatterns = [
     path('seguros/contratar/<int:tipo_id>/', views.contratar_seguro, name='contratar_seguro'),
     path('grafica-movimientos/', views.grafica_movimientos, name='grafica_movimientos'),
     path('grafica-seguros-marketing/', views.grafica_marketing, name='grafica_marketing'),
+    path('estado-cuenta/', views.estado_cuenta_pdf, name='estado_cuenta_pdf'),
 
 ]
