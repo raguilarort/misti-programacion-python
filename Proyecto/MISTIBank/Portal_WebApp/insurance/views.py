@@ -17,7 +17,8 @@ from datetime import datetime
 from django.http import FileResponse, HttpResponse
 from django.conf import settings
 from django.template.loader import render_to_string
-from weasyprint import HTML
+
+import pdfkit
 
 
 
@@ -206,60 +207,45 @@ def grafica_marketing(request):
     return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})
 
 
-def generar_pdf_estado_cuenta(usuario, mes, anio):
-    carpeta_pdfs = os.path.join(settings.MEDIA_ROOT, 'estados_de_cuenta')
-    os.makedirs(carpeta_pdfs, exist_ok=True)
-
-    filename = f"estado_{usuario.username}_{mes}_{anio}.pdf"
-    ruta_pdf = os.path.join(carpeta_pdfs, filename)
-
-    if os.path.exists(ruta_pdf):
-        return ruta_pdf  # Ya existe
-
-    # Datos del usuario y movimientos
-    movimientos = Movimiento.objects.filter(
-        usuario=usuario,
-        fecha__month=mes,
-        fecha__year=anio
-    ).order_by('-fecha')
-
-    seguros = SeguroContratado.objects.filter(
-        usuario=usuario,
-        fecha_contratacion__month=mes,
-        fecha_contratacion__year=anio
-    )
-
-    # Renderizar HTML con adornos
-    html = render_to_string("estado_cuenta_pdf.html", {
-        "usuario": usuario,
-        "movimientos": movimientos,
-        "seguros": seguros,
-        "mes": mes,
-        "anio": anio
-    })
-
-    # Crear el PDF con WeasyPrint
-    with open(ruta_pdf, "wb") as f:
-        HTML(string=html).write_pdf(f)
-
-    return ruta_pdf
-
 def estado_cuenta_pdf(request):
     usuario_id = request.session.get("usuario_id")
     if not usuario_id:
         return redirect("login")
 
-    try:
-        usuario = Usuario.objects.get(id=usuario_id)
-    except Usuario.DoesNotExist:
-        return redirect("login")
+    usuario = Usuario.objects.get(id=usuario_id)
 
-    ahora = datetime.now()
-    mes = ahora.month
-    anio = ahora.year
+    # Obtener movimientos
+    movimientos_qs = Movimiento.objects.filter(usuario=usuario).order_by('-fecha')
+    movimientos = [{
+        "fecha": mov.fecha.strftime("%d/%m/%Y"),
+        "descripcion": mov.tipo.capitalize(),
+        "monto": f"${mov.cantidad:.2f}",
+        "canal": "App"
+    } for mov in movimientos_qs]
 
-    ruta_pdf = generar_pdf_estado_cuenta(usuario, mes, anio)
-    if not os.path.exists(ruta_pdf):
-        return HttpResponse("No se pudo generar el PDF", status=500)
+    # Obtener seguros contratados
+    seguros_qs = SeguroContratado.objects.filter(usuario=usuario)
+    seguros = [{
+        "nombre": s.tipo_seguro.nombre,
+        "precio": f"${s.tipo_seguro.precio:.2f}"
+    } for s in seguros_qs]
+    total_mensual = sum(s.tipo_seguro.precio for s in seguros_qs)
 
-    return FileResponse(open(ruta_pdf, "rb"), content_type='application/pdf')
+    fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    html = render_to_string("estado_cuenta_pdf.html", {
+        "usuario": usuario,
+        "movimientos": movimientos,
+        "seguros": seguros,
+        "total_mensual": f"${total_mensual:.2f}",
+        "fecha_actual": fecha_actual,
+    })
+
+    config = pdfkit.configuration(
+        wkhtmltopdf=r'C:\Users\ENRIQUE OJEDA\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    )
+    pdf = pdfkit.from_string(html, False, configuration=config)
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = "inline; filename='estado_cuenta.pdf'"
+    return response
