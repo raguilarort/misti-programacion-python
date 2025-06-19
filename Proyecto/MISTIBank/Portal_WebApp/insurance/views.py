@@ -242,7 +242,7 @@ def estado_cuenta_pdf(request):
     })
 
     config = pdfkit.configuration(
-        wkhtmltopdf=r'C:\Users\ENRIQUE OJEDA\wkhtmltopdf\bin\wkhtmltopdf.exe'
+        wkhtmltopdf=r'C:\Users\ENRIQUE OJEDA\wkhtmltopdf\bin\wkhtmltopdf.exe'##### COLOCAR RUTA
     )
     pdf = pdfkit.from_string(html, False, configuration=config)
 
