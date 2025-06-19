@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Depositar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <section class="login-section">
+        <div class="login-container">
+            <h2>Depositar</h2>
+            <p>Ingresa el monto a depositar</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="monto">Monto:</label>
+                    <input type="number" name="monto" step="0.01" required>
+                </div>
+                <button type="submit" class="cta-button">Guardar</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
