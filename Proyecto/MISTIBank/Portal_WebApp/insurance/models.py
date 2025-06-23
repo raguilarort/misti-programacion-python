@@ -1,15 +1,17 @@
-from django.db import models
-from django.contrib.auth.hashers import make_password, check_password
+from django.db import models #importa el módulo para definir modelos de base de datos
+from django.contrib.auth.hashers import make_password, check_password #funciones para hashear y verificar contraseñas
+#se definen tablas de la base de datos como clases
 
 class Usuario(models.Model):
     username = models.CharField(max_length=150, unique=True)
     correo = models.EmailField(unique=True)
-    password = models.CharField(max_length=256)
+    password = models.CharField(max_length=256)#contraseña hasheada (nunca se guarda en texto plano)
     saldo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
+## mtodo para asignar una contraseña aplicando hash (usando PBKDF2 + salt)
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
-
+#metodo para verificar si una contraseña ingresada coincide con el hash almacenado
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 

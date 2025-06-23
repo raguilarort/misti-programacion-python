@@ -140,7 +140,7 @@ def contratar_seguro(request, tipo_id):
 
     return redirect("seguros_contratados")
 
-# GRAFICAS
+# GRAFICAS 
 def grafica_movimientos(request):
     usuario_id = request.session.get("usuario_id")#se obtiene el id del usuario que ha iniciado sesión 
     if not usuario_id:
@@ -206,7 +206,7 @@ def grafica_marketing(request):
 
     return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})#se renderiza la plantilla HTML y se inserta la imagen
 
-
+#PDF (se intento con xhtml2pdf y WeasyPrint pero su instalacion fue complicada por ciertas dependencias)
 def estado_cuenta_pdf(request):
     usuario_id = request.session.get("usuario_id")# se recupera el id del usuario desde la sesión
     if not usuario_id:
