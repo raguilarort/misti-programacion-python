@@ -4,23 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Gráfica de Movimientos</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><!-- se carga la biblioteca Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script><!-- se carga el plugin para mostrar etiquetas en la gráfica -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"><!-- se vincula el archivo de estilos CSS del proyecto -->
 </head>
 <body>
-    <section class="dashboard">
+    <section class="dashboard"><!-- Sección principal de la vista con estilo de panel -->
         <div class="dashboard-header">
             <h2>Movimientos del Mes</h2>
             <p>Distribución entre depósitos y retiros</p>
         </div>
 
         <div style="max-width: 500px; margin: auto;">
-            <canvas id="graficoMovimientos"></canvas>
+            <canvas id="graficoMovimientos"></canvas> <!-- area donde se dibuja la gráfica tipo pastel -->
         </div>
 
         <div style="text-align:center; margin-top: 30px;">
-            <a href="{% url 'dashboard' %}" class="action-btn">Regresar</a>
+            <a href="{% url 'dashboard' %}" class="action-btn">Regresar</a> <!--  botón de regreso -->
         </div>
     </section>
 
@@ -28,7 +28,7 @@
         const ctx = document.getElementById('graficoMovimientos').getContext('2d');
 
         const grafico = new Chart(ctx, {
-            type: 'pie',
+            type: 'pie',// tipo de gráfica: pastel
             data: {
                 labels: {{ labels|safe }},
                 datasets: [{

@@ -4,24 +4,23 @@ from .models import Usuario, Movimiento
 from decimal import Decimal
 from .models import Usuario, Movimiento, SeguroContratado
 from .models import Usuario, Movimiento, SeguroContratado, TipoSeguro
-from django.utils.timezone import now
-from datetime import timedelta
-from .models import Movimiento
-from django.db.models import Count
-from .models import TipoSeguro, SeguroContratado
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-import os
 from datetime import datetime
+import os
 from django.http import FileResponse, HttpResponse
 from django.conf import settings
 from django.template.loader import render_to_string
-
+#Para graficar con Chart.js
+from datetime import timedelta
+from django.utils.timezone import now
+from .models import Movimiento
+#Para graficar con Matplotlib
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from .models import TipoSeguro, SeguroContratado
+from django.db.models import Count
+#Para generacion de archivos
 import pdfkit
-
-
-
 
 # VISTA INICIAL
 def hello(request):
@@ -35,9 +34,9 @@ def login_view(request):
         password = request.POST.get("password")
 
         try:
-            usuario = Usuario.objects.get(username=username)
-            if usuario.check_password(password):
-                request.session["usuario_id"] = usuario.id
+            usuario = Usuario.objects.get(username=username)#se busca en la bd el usuario
+            if usuario.check_password(password):#se verifica si la contraseña ingresada, después de aplicar el mismo algoritmo de hash (PBKDF2 por defecto en Django) coincide con el hash almacenado del usuario
+                request.session["usuario_id"] = usuario.id#si la contraseña es válida, guarda el id del usuario en la sesión del navegador
                 return redirect("dashboard")
             else:
                 error = "Contraseña incorrecta"
@@ -141,81 +140,83 @@ def contratar_seguro(request, tipo_id):
 
     return redirect("seguros_contratados")
 
-
+# GRAFICAS
 def grafica_movimientos(request):
-    usuario_id = request.session.get("usuario_id")
+    usuario_id = request.session.get("usuario_id")#se obtiene el id del usuario que ha iniciado sesión 
     if not usuario_id:
-        return redirect("login")
+        return redirect("login")#si no hay sesion activa redirige a la pagina para iniciar sesion
 
     fecha_inicio = now() - timedelta(days=30)
-    movimientos = Movimiento.objects.filter(usuario_id=usuario_id, fecha__gte=fecha_inicio)
+    movimientos = Movimiento.objects.filter(usuario_id=usuario_id, fecha__gte=fecha_inicio)#se consultan todos los movimientos del usuario realizados en los últimos 30 días
 
-    conteo = {"DEPOSITO": 0, "RETIRO": 0}
-    for mov in movimientos:
+    conteo = {"DEPOSITO": 0, "RETIRO": 0}#se inicializa un diccionario para contar cuántos depósitos y retiros hay
+    for mov in movimientos:#en donde el for recorrera los movimientos e ira sumando 1 segun corresponda
         tipo = mov.tipo.upper()
         if tipo in conteo:
             conteo[tipo] += 1
 
-    total = sum(conteo.values()) or 1
+    total = sum(conteo.values()) or 1#Se suma la cantidad total de movimientos para luego calcular porcentajes, si es 0, se evita división por cero usando 1
     porcentajes = {k: round((v / total) * 100, 1) for k, v in conteo.items()}
-
+    
+#se preparan los datos que se enviarán al template
     context = {
         "labels": list(conteo.keys()),
         "valores": list(conteo.values()),
         "porcentajes": list(porcentajes.values())
     }
 
-    return render(request, "grafica_movimientos.html", context)
+    return render(request, "grafica_movimientos.html", context)#se renderiza la plantilla grafica_movimientos.html pasando los datos para que se usen en la gráfica con Chart.js
 
 def grafica_marketing(request):
-    datos = (SeguroContratado.objects
+    datos = (SeguroContratado.objects#se realiza una consulta a la base de datos para ver cuántas veces ha sido contratado cada uno y se ordena de mayor a menor
              .values('tipo_seguro__nombre')
              .annotate(total=Count('id'))
              .order_by('-total'))
 
-    labels = [d['tipo_seguro__nombre'] for d in datos]
+    labels = [d['tipo_seguro__nombre'] for d in datos]#se extraen las etiquetas (nombres de seguros) y los valores (cantidad contratados) desde los datos obtenidos
     valores = [d['total'] for d in datos]
-    total = sum(valores) or 1  # Evitar división por cero
+    total = sum(valores) or 1  #se calcula la suma total de seguros contratados y se calculan porcentajes
 
-    # Calcular porcentajes
+    
     porcentajes = [(v / total) * 100 for v in valores]
 
-    # Colores llamativos
+    # se define paleta de colores
     colores = ['#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1']  # azul, verde, rojo, amarillo, morado
 
-    # Crear gráfica
-    plt.figure(figsize=(9, 5))
-    bars = plt.bar(labels, porcentajes, color=colores[:len(labels)])
+    # procedimiento para crear gráfica por matplotlib
+    plt.figure(figsize=(9, 5))#se crea figura de 9x5 pulgadas
+    bars = plt.bar(labels, porcentajes, color=colores[:len(labels)])#se dibuja grafica de barras con etiquetas en ejes
     plt.title('Seguros más Contratados')
     plt.ylabel('Porcentaje (%)')
     plt.ylim(0, 100)
 
-    # Mostrar porcentaje arriba de cada barra
+    #se coloca etiqueta de porcentaje arriba de cada barra
     for bar, pct in zip(bars, porcentajes):
         plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1, f'{pct:.1f}%', ha='center', fontsize=10)
 
-    plt.tight_layout()
+    plt.tight_layout()#se ajusta el diseño
 
-    # Convertir a imagen base64
+    #se guarda la imagen generada en formato png
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')#se convierte la imagen a una cadena base 64 para poder insertarla en el html sin necesidad de guardar como archivo
     buffer.close()
     plt.close()
 
-    return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})
+    return render(request, 'grafica_marketing.html', {'grafica': imagen_base64})#se renderiza la plantilla HTML y se inserta la imagen
 
 
 def estado_cuenta_pdf(request):
-    usuario_id = request.session.get("usuario_id")
+    usuario_id = request.session.get("usuario_id")# se recupera el id del usuario desde la sesión
     if not usuario_id:
         return redirect("login")
 
-    usuario = Usuario.objects.get(id=usuario_id)
+    usuario = Usuario.objects.get(id=usuario_id)#se obtiene el usuario que coincide con el id 
 
-    # Obtener movimientos
+    #se obtienen todos los movimientos del usuario, ordenándolos del más reciente al más antiguo
     movimientos_qs = Movimiento.objects.filter(usuario=usuario).order_by('-fecha')
+    #se crea una lista de diccionarios con los datos dde cada movimiento 
     movimientos = [{
         "fecha": mov.fecha.strftime("%d/%m/%Y"),
         "descripcion": mov.tipo.capitalize(),
@@ -223,16 +224,17 @@ def estado_cuenta_pdf(request):
         "canal": "App"
     } for mov in movimientos_qs]
 
-    # Obtener seguros contratados
+    #se obtiennen todos los seguros contratados por el usuario
     seguros_qs = SeguroContratado.objects.filter(usuario=usuario)
+    #se genera una lista de diccionarios con la info de cada seguro contratado
     seguros = [{
         "nombre": s.tipo_seguro.nombre,
         "precio": f"${s.tipo_seguro.precio:.2f}"
     } for s in seguros_qs]
-    total_mensual = sum(s.tipo_seguro.precio for s in seguros_qs)
+    total_mensual = sum(s.tipo_seguro.precio for s in seguros_qs)#se calcula el total mensual a pagar de los seguros
 
-    fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M")
-
+    fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M")#se obtiene la fecha para colocarla
+#se usa la plantilla para inyectar datos
     html = render_to_string("estado_cuenta_pdf.html", {
         "usuario": usuario,
         "movimientos": movimientos,
@@ -242,10 +244,10 @@ def estado_cuenta_pdf(request):
     })
 
     config = pdfkit.configuration(
-        wkhtmltopdf=r'C:\Users\ENRIQUE OJEDA\wkhtmltopdf\bin\wkhtmltopdf.exe'##### COLOCAR RUTA
+        wkhtmltopdf=r'C:\Users\ENRIQUE OJEDA\wkhtmltopdf\bin\wkhtmltopdf.exe'#se configura PDFKit especificando la ruta donde está instalado wkhtmltopdf porque es necesario para generar el PDF
     )
-    pdf = pdfkit.from_string(html, False, configuration=config)
+    pdf = pdfkit.from_string(html, False, configuration=config)#se convierte el html a pdf
 
-    response = HttpResponse(pdf, content_type="application/pdf")
+    response = HttpResponse(pdf, content_type="application/pdf")#se crea una respuesta HTTP que devuelve el PDF para que se abra directamente en el navegador para no forzar descargar
     response["Content-Disposition"] = "inline; filename='estado_cuenta.pdf'"
     return response

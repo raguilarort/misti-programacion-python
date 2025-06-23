@@ -57,7 +57,7 @@
                         <div class="quick-actions">
                             <a href="{% url 'depositar' %}" class="action-btn">Depositar</a>
                             <a href="{% url 'retirar' %}" class="action-btn">Retirar</a>
-                            <a href="{% url 'estado_cuenta_pdf' %}" class="action-btn" target="_blank">Ver Estado de Cuenta</a>
+                            <a href="{% url 'estado_cuenta_pdf' %}" class="action-btn" target="_blank">Ver Estado de Cuenta</a><!-- enlace que genera el PDF con pdfkit y target para abrir en otra pestana-->
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="card-content">
                         <h3>Gráfica de Movimientos</h3>
                         <p>Visualiza los depósitos y retiros realizados en el mes.</p>
-                        <a href="{% url 'grafica_movimientos' %}" class="action-btn">Ver Gráfica</a>
+                        <a href="{% url 'grafica_movimientos' %}" class="action-btn">Ver Gráfica</a><!-- enlace a la vista que muestra la gráfica interactiva generada con Chart.js -->
                     </div>
                 </div>
             </div>
